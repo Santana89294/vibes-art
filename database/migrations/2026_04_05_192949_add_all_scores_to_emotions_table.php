@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('emotions', function (Blueprint $table) {
+            $table->json('all_scores')->nullable()->after('intensidad_emo');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('emotions', function (Blueprint $table) {
+            $table->dropColumn('all_scores');
+        });
+    }
+};
