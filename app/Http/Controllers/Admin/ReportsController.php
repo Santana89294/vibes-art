@@ -10,34 +10,35 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    // ─── HU019: Reportes generales de emociones ───────────────────────
     public function index()
     {
-        // Emociones predominantes globales
         $emocionesGlobales = Emotion::selectRaw('emocion_amo, COUNT(*) as total')
             ->groupBy('emocion_amo')
             ->orderByDesc('total')
             ->get();
 
-        // Total de registros
         $totalRegistros = Emotion::count();
 
-        // Emociones por mes (últimos 6 meses)
-        $emocionesPorMes = Emotion::selectRaw("EXTRACT(MONTH FROM fecha_emo) as mes, EXTRACT(YEAR FROM fecha_emo) as anio, COUNT(*) as total")
+        $emocionesPorMesRaw = Emotion::selectRaw('MONTH(fecha_emo) as mes, YEAR(fecha_emo) as anio, COUNT(*) as total')
             ->where('fecha_emo', '>=', now()->subMonths(6))
             ->groupBy('mes', 'anio')
             ->orderBy('anio')
             ->orderBy('mes')
             ->get();
 
-        // Top usuarios más activos
+        $mesesLabels  = [];
+        $mesesTotales = [];
+        foreach ($emocionesPorMesRaw as $r) {
+            $mesesLabels[]  = str_pad($r->mes, 2, '0', STR_PAD_LEFT) . '/' . $r->anio;
+            $mesesTotales[] = $r->total;
+        }
+
         $topUsuarios = User::where('role', 'usuario')
             ->withCount('emotions')
             ->orderByDesc('emotions_count')
             ->take(5)
             ->get();
 
-        // Intensidad promedio por emoción
         $intensidadPromedio = Emotion::selectRaw('emocion_amo, AVG(intensidad_emo) as promedio')
             ->groupBy('emocion_amo')
             ->orderByDesc('promedio')
@@ -45,11 +46,11 @@ class ReportsController extends Controller
 
         return view('admin.reports.index', compact(
             'emocionesGlobales', 'totalRegistros',
-            'emocionesPorMes', 'topUsuarios', 'intensidadPromedio'
+            'mesesLabels', 'mesesTotales',
+            'topUsuarios', 'intensidadPromedio'
         ));
     }
 
-    // ─── HU020: Gestión de notificaciones ─────────────────────────────
     public function notifications()
     {
         $notifications = VibesNotification::orderBy('tipo')->get();
