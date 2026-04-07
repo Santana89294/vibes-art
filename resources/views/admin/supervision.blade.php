@@ -6,7 +6,7 @@
 <div class="page-header">
     <div class="page-title">
         Supervisión del sistema emocional
-        <span>HU017 — Monitoreo del motor de detección</span>
+        <span>Monitoreo del motor de detección</span>
     </div>
 </div>
 

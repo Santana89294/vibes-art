@@ -6,7 +6,7 @@
 <div class="page-header">
     <div class="page-title">
         Catálogo Musical
-        <span>HU018 — Gestión de canciones por emoción</span>
+        <span>--- Gestión de canciones por emoción</span>
     </div>
     <a href="{{ route('admin.music.create') }}" class="btn btn-gradient">
         + Agregar canción
