@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -35,10 +36,10 @@ class RegisterController extends Controller
             'contra_user.confirmed' => 'Las contraseñas no coinciden.',
         ]);
 
-        // Generar código de verificación
+        // Código de verificación
         $code = random_int(100000, 999999);
 
-        // Guardar datos del usuario temporalmente en caché (15 minutos)
+        // Guardar en cache (15 min)
         Cache::put('pending_user_' . $request->email_user, [
             'nom_user'    => $request->nom_user,
             'edad_user'   => $request->edad_user,
@@ -47,27 +48,29 @@ class RegisterController extends Controller
             'code'        => $code,
         ], now()->addMinutes(15));
 
-        // Enviar correo con código
-        Mail::send([], [], function ($message) use ($request, $code) {
-            $message->to($request->email_user)
-                ->subject('🎨 Vibes Art - Verifica tu correo')
-                ->html("
-                    <div style='font-family:sans-serif;max-width:480px;margin:auto;background:#12121a;color:#e2e2f0;padding:2rem;border-radius:16px;'>
-                        <h1 style='background:linear-gradient(135deg,#c084fc,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.8rem;'>🎨 Vibes Art</h1>
-                        <p>¡Hola {$request->nom_user}! Gracias por registrarte.</p>
-                        <p>Tu código de verificación es:</p>
-                        <div style='background:#1e1e2e;border-radius:12px;padding:1.5rem;text-align:center;margin:1.5rem 0;'>
-                            <span style='font-size:2.5rem;font-weight:bold;letter-spacing:0.5rem;color:#c084fc;'>{$code}</span>
+        // 🔥 IMPORTANTE: intentar enviar correo SIN romper app
+        try {
+            Mail::send([], [], function ($message) use ($request, $code) {
+                $message->to($request->email_user)
+                    ->subject('🎨 Vibes Art - Verifica tu correo')
+                    ->html("
+                        <div style='font-family:sans-serif;max-width:480px;margin:auto;background:#12121a;color:#e2e2f0;padding:2rem;border-radius:16px;'>
+                            <h1 style='color:#c084fc;'>🎨 Vibes Art</h1>
+                            <p>¡Hola {$request->nom_user}!</p>
+                            <p>Tu código es:</p>
+                            <h2 style='text-align:center;color:#c084fc;'>{$code}</h2>
+                            <p>Expira en 15 minutos.</p>
                         </div>
-                        <p style='color:#6b6b8a;font-size:0.85rem;'>Este código expira en 15 minutos. Si no te registraste en Vibes Art, ignora este correo.</p>
-                    </div>
-                ");
-        });
+                    ");
+            });
+        } catch (\Exception $e) {
+            // ❌ No rompe la app
+            Log::error('Error enviando correo: ' . $e->getMessage());
+        }
 
-        // Guardar email en sesión para verificar
         session(['pending_email' => $request->email_user]);
 
         return redirect()->route('verify.email')
-            ->with('success', 'Código enviado a tu correo. Verifícalo para completar el registro ✓');
+            ->with('success', 'Código enviado (o generado). Revisa tu correo.');
     }
 }
