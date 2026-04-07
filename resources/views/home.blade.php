@@ -59,9 +59,18 @@
             border-radius: 12px; color: var(--muted);
             font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
             cursor: pointer; text-decoration: none;
-            transition: border-color 0.2s, color 0.2s;
+            transition: border-color 0.2s, color 0.2s; margin-bottom: 0.8rem;
         }
         .btn-outline:hover { border-color: var(--accent1); color: var(--accent1); }
+        .btn-danger {
+            display: block; width: 100%; padding: 0.85rem;
+            background: transparent; border: 1px solid rgba(239,68,68,0.4);
+            border-radius: 12px; color: #ef4444;
+            font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+            cursor: pointer; text-decoration: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .btn-danger:hover { border-color: #ef4444; background: rgba(239,68,68,0.1); }
     </style>
 </head>
 <body>
@@ -78,16 +87,23 @@
         <a href="{{ route('emotions.diary') }}" class="btn-primary">
             ✍️ Escribir en mi diario
         </a>
-<a href="{{ route('gallery.index') }}" class="btn-primary" style="margin-bottom:0.8rem;">
-    🖼️ Ver mi galería
-</a>
+        <a href="{{ route('gallery.index') }}" class="btn-primary">
+            🖼️ Ver mi galería
+        </a>
+
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn-outline">Cerrar sesión</button>
         </form>
 
-    </div>
+        <form method="POST" action="{{ route('account.delete') }}"
+            onsubmit="return confirm('¿Estás seguro? Esta acción eliminará tu cuenta y todos tus datos permanentemente.')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn-danger">🗑️ Eliminar mi cuenta</button>
+        </form>
 
+    </div>
 </div>
 </body>
 </html>
