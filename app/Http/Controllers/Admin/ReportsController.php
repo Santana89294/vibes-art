@@ -23,7 +23,7 @@ class ReportsController extends Controller
         $totalRegistros = Emotion::count();
 
         // Emociones por mes (últimos 6 meses)
-        $emocionesPorMes = Emotion::selectRaw('MONTH(fecha_emo) as mes, YEAR(fecha_emo) as anio, COUNT(*) as total')
+        $emocionesPorMes = Emotion::selectRaw("EXTRACT(MONTH FROM fecha_emo) as mes, EXTRACT(YEAR FROM fecha_emo) as anio, COUNT(*) as total")
             ->where('fecha_emo', '>=', now()->subMonths(6))
             ->groupBy('mes', 'anio')
             ->orderBy('anio')
