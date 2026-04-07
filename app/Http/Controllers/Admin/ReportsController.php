@@ -10,47 +10,70 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
+    // ─── HU019: Reportes generales de emociones ───────────────────────
     public function index()
     {
+        // Emociones predominantes globales
         $emocionesGlobales = Emotion::selectRaw('emocion_amo, COUNT(*) as total')
             ->groupBy('emocion_amo')
             ->orderByDesc('total')
             ->get();
 
+        // Total de registros
         $totalRegistros = Emotion::count();
 
-        $emocionesPorMesRaw = Emotion::selectRaw('MONTH(fecha_emo) as mes, YEAR(fecha_emo) as anio, COUNT(*) as total')
+        // Emociones por mes (últimos 6 meses) ✅ FIX PostgreSQL
+        $emocionesPorMes = Emotion::selectRaw("
+                EXTRACT(MONTH FROM fecha_emo) as mes,
+                EXTRACT(YEAR FROM fecha_emo) as anio,
+                COUNT(*) as total
+            ")
             ->where('fecha_emo', '>=', now()->subMonths(6))
-            ->groupBy('mes', 'anio')
-            ->orderBy('anio')
-            ->orderBy('mes')
+            ->groupByRaw("EXTRACT(YEAR FROM fecha_emo), EXTRACT(MONTH FROM fecha_emo)")
+            ->orderByRaw("EXTRACT(YEAR FROM fecha_emo) ASC")
+            ->orderByRaw("EXTRACT(MONTH FROM fecha_emo) ASC")
             ->get();
 
-        $mesesLabels  = [];
+        // 🔥 Preparar datos para Chart.js
+        $mesesLabels = [];
         $mesesTotales = [];
-        foreach ($emocionesPorMesRaw as $r) {
-            $mesesLabels[]  = str_pad($r->mes, 2, '0', STR_PAD_LEFT) . '/' . $r->anio;
-            $mesesTotales[] = $r->total;
+
+        $mesesNombres = [
+            1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',
+            7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dic'
+        ];
+
+        foreach ($emocionesPorMes as $item) {
+            $mes = (int) $item->mes;
+            $mesesLabels[] = $mesesNombres[$mes] . ' ' . $item->anio;
+            $mesesTotales[] = $item->total;
         }
 
+        // Top usuarios más activos
         $topUsuarios = User::where('role', 'usuario')
             ->withCount('emotions')
             ->orderByDesc('emotions_count')
             ->take(5)
             ->get();
 
+        // Intensidad promedio por emoción
         $intensidadPromedio = Emotion::selectRaw('emocion_amo, AVG(intensidad_emo) as promedio')
             ->groupBy('emocion_amo')
             ->orderByDesc('promedio')
             ->get();
 
         return view('admin.reports.index', compact(
-            'emocionesGlobales', 'totalRegistros',
-            'mesesLabels', 'mesesTotales',
-            'topUsuarios', 'intensidadPromedio'
+            'emocionesGlobales',
+            'totalRegistros',
+            'emocionesPorMes',
+            'topUsuarios',
+            'intensidadPromedio',
+            'mesesLabels',
+            'mesesTotales'
         ));
     }
 
+    // ─── HU020: Gestión de notificaciones ─────────────────────────────
     public function notifications()
     {
         $notifications = VibesNotification::orderBy('tipo')->get();
