@@ -177,5 +177,46 @@
     const ta = document.getElementById('texto_emo');
     if (ta) document.getElementById('charCount').textContent = ta.value.length;
 </script>
+<button onclick="toggleTheme()" id="themeBtn" style="
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    width:48px; height:48px; border-radius:50%;
+    background:var(--surface); border:1px solid var(--border);
+    color:var(--text); font-size:1.3rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:999;
+    transition: transform 0.2s;">
+    🌙
+</button>
+
+<script>
+function toggleTheme() {
+    const root = document.documentElement;
+    const btn = document.getElementById('themeBtn');
+    if (document.body.classList.contains('light-mode')) {
+        document.body.classList.remove('light-mode');
+        btn.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.add('light-mode');
+        btn.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    }
+}
+// Aplicar tema guardado
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('themeBtn').textContent = '☀️';
+}
+</script>
+
+<style>
+body.light-mode {
+    --bg: #f5f5f5;
+    --surface: #ffffff;
+    --border: #e0e0e0;
+    --text: #1a1a2e;
+    --muted: #666680;
+}
+</style>
 </body>
 </html>

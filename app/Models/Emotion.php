@@ -14,6 +14,7 @@ class Emotion extends Model
         'emocion_amo',
         'intensidad_emo',
         'all_scores',
+        'art_image',
         'fecha_emo',
     ];
 

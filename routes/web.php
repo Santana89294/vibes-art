@@ -57,6 +57,7 @@ Route::middleware('auth.vibes')->group(function () {
     Route::get('/galeria',             [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
     Route::get('/galeria/{emotion}',   [\App\Http\Controllers\GalleryController::class, 'show'])->name('gallery.show');
     Route::delete('/cuenta', [\App\Http\Controllers\Auth\ProfileController::class, 'deleteAccount'])->name('account.delete');
+    Route::post('/galeria/save-art/{emotion}', [\App\Http\Controllers\GalleryController::class, 'saveArt'])->name('gallery.save-art');
 });
 
 // ══════════════════════════════════════════════════════════════════

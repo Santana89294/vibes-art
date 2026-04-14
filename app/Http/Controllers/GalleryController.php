@@ -99,5 +99,22 @@ class GalleryController extends Controller
         return view('gallery.show', compact(
             'emotion', 'color', 'emoji', 'artConfig', 'allEmotionColors'
         ));
+
     }
+    public function saveArt(Request $request, Emotion $emotion)
+{
+    if ($emotion->user_id !== Auth::id()) {
+        abort(403);
+    }
+
+    $request->validate([
+        'art_image' => 'required|string',
+    ]);
+
+    $emotion->update([
+        'art_image' => $request->art_image,
+    ]);
+
+    return response()->json(['success' => true]);
+}
 }
