@@ -231,7 +231,7 @@ window.addEventListener('load', function() {
         }
         return dominantColor;
     };
-    // Guardar arte después de generarlo
+// Guardar arte después de generarlo
 setTimeout(function() {
     const canvas = document.getElementById('artCanvas');
     if (canvas) {
@@ -246,7 +246,6 @@ setTimeout(function() {
         });
     }
 }, 1500);
-
     // ── Fondo ──
     const bgGrad = ctx.createLinearGradient(0, 0, W, H);
     bgGrad.addColorStop(0, '#0a0a0f');
