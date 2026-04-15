@@ -11,7 +11,7 @@ class EmotionDetectionService
             'desconfiado', 'introvertido', 'irritado', 'enfurecido', 'hostil',
             'provocador', 'rabioso', 'furioso', 'ultrajado',
             'resentido', 'celoso', 'atacado', 'devastado', 'apenado',
-            
+
         ],
         'miedo' => [
            'humillado', 'rechazado', 'sumiso', 'inseguro',
@@ -21,7 +21,7 @@ class EmotionDetectionService
             'espantado', 'aterrado',
         ],
         'asco' => [
-            'disconforme', 'desepcionado', 'horrible', 'abstinencia',
+            'asco','disconforme', 'desepcionado', 'horrible', 'abstinencia',
             'moralista', 'reacio', 'repugnante', 'revoltoso', 'odioso',
             'aversion', 'vacilante',
         ],
@@ -39,7 +39,7 @@ class EmotionDetectionService
             'curioso', 'importante', 'seguro', 'respetado',
             'satisfecho', 'valiente', 'provocativo', 'cariñoso', 'esperanzado',
             'sensible', 'bromista', 'abierto', 'inspirado',
-            
+
         ],
         'sorpresa' => [
             'sorprendido', 'confundido', 'asombrado',
