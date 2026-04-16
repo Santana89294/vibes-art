@@ -6,6 +6,7 @@
     <title>Admin – Vibes Art | @yield('title')</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+
         :root {
             --bg:       #08080e;
             --surface:  #10101a;
@@ -21,6 +22,65 @@
             --warning:  #fbbf24;
             --sidebar-w: 240px;
         }
+        body.light {
+    --bg:       #f5f5f9;
+    --surface:  #ffffff;
+    --card:     #ffffff;
+    --border:   #e5e7eb;
+    --text:     #1f2937;
+    --muted:    #6b7280;
+
+    --accent1:  #9333ea;
+    --accent2:  #ec4899;
+    --accent3:  #0284c7;
+
+    --error:    #dc2626;
+    --success:  #16a34a;
+    --warning:  #d97706;
+}
+        /* 🔥 FORZAR COLORES GLOBALES */
+body,
+.sidebar,
+.main,
+.card,
+.stat-card,
+table,
+th,
+td,
+input,
+select {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* superficies */
+.sidebar,
+.card,
+.stat-card {
+    background: var(--surface);
+}
+
+/* inputs */
+input, select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+/* tablas */
+th, td {
+    border-color: var(--border);
+}
+
+/* hover filas */
+tr:hover td {
+    background: rgba(0,0,0,0.05);
+}
+
+/* modo oscuro hover fix */
+body:not(.light) tr:hover td {
+    background: rgba(255,255,255,0.02);
+}
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -252,6 +312,12 @@
         }
         .pagination a:hover { border-color: var(--accent1); color: var(--accent1); }
         .pagination .active span { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; border-color: transparent; }
+        body.light .stat-num,
+body.light .sidebar-brand {
+    -webkit-text-fill-color: initial;
+    color: var(--accent1);
+    background: none;
+}
     </style>
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
@@ -326,47 +392,38 @@
 
     @yield('content')
 </main>
-<button onclick="toggleTheme()" id="themeBtn" style="
-    position:fixed; bottom:1.5rem; right:1.5rem;
-    width:48px; height:48px; border-radius:50%;
-    background:var(--surface); border:1px solid var(--border);
-    color:var(--text); font-size:1.3rem; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:999;
-    transition: transform 0.2s;">
-    🌙
+<button id="toggleTheme" class="btn btn-outline" style="position:fixed; top:20px; right:20px; z-index:999;">
+    ☀️ Modo claro
 </button>
-
 <script>
-function toggleTheme() {
-    const root = document.documentElement;
-    const btn = document.getElementById('themeBtn');
-    if (document.body.classList.contains('light-mode')) {
-        document.body.classList.remove('light-mode');
-        btn.textContent = '🌙';
-        localStorage.setItem('theme', 'dark');
-    } else {
-        document.body.classList.add('light-mode');
-        btn.textContent = '☀️';
-        localStorage.setItem('theme', 'light');
+document.addEventListener('DOMContentLoaded', function () {
+
+    const btn = document.getElementById('toggleTheme');
+
+    function aplicarTema() {
+        const theme = localStorage.getItem('theme');
+
+        if (theme === 'light') {
+            document.body.classList.add('light');
+            btn.textContent = '🌙 Modo oscuro';
+        } else {
+            document.body.classList.remove('light');
+            btn.textContent = '☀️ Modo claro';
+        }
     }
-}
-// Aplicar tema guardado
-if (localStorage.getItem('theme') === 'light') {
-    document.body.classList.add('light-mode');
-    document.getElementById('themeBtn').textContent = '☀️';
-}
+
+    aplicarTema();
+
+    btn.addEventListener('click', () => {
+        if (document.body.classList.contains('light')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+        aplicarTema();
+    });
+
+});
 </script>
-
-<style>
-body.light-mode {
-    --bg: #f5f5f5;
-    --surface: #ffffff;
-    --border: #e0e0e0;
-    --text: #1a1a2e;
-    --muted: #666680;
-}
-</style>
-
 </body>
 </html>
