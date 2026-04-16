@@ -59,7 +59,7 @@ class GalleryController extends Controller
 
         $stats = [
             'total'    => $emociones->count(),
-            'dias_mes' => now()->setMonth($mes)->daysInMonth,
+            'dias_mes' => now()->setMonth((int) $mes)->daysInMonth,
         ];
 
         return view('gallery.index', compact(
