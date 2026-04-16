@@ -6,12 +6,61 @@
     <title>Vibes Art – Reportes</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+function toggleTheme() {
+    const btn = document.getElementById('themeBtn');
+
+    if (document.body.classList.contains('light')) {
+        document.body.classList.remove('light');
+        btn.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.add('light');
+        btn.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    }
+    // 🔥 ESTO VA FUERA del if/else (MUY IMPORTANTE)
+    if (typeof chart !== 'undefined') {
+        chart.destroy();
+        chart = crearGrafica();
+    }
+}
+
+// aplicar tema al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('themeBtn');
+    const theme = localStorage.getItem('theme');
+
+    if (theme === 'light') {
+        document.body.classList.add('light');
+        if (btn) btn.textContent = '☀️';
+    } else {
+        document.body.classList.remove('light');
+        if (btn) btn.textContent = '🌙';
+    }
+});
+</script>
+
     <style>
         :root {
             --bg: #0a0a0f; --surface: #12121a; --border: #1e1e2e;
             --accent1: #c084fc; --accent2: #f472b6;
             --text: #e2e2f0; --muted: #6b6b8a;
+            --chart-grid: #1e1e2e;
+            --chart-text: #6b6b8a;
         }
+        body.light {
+    --bg: #f5f5f9;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --muted: #6b7280;
+
+    --accent1: #9333ea;
+    --accent2: #ec4899;
+    --chart-grid: #e5e7eb;
+    --chart-text: #6b7280;
+}
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
         body::before {
@@ -210,29 +259,56 @@
 </div>
 
 <script>
-new Chart(document.getElementById('monthChart'), {
-    type: 'bar',
-    data: {
-        labels: @json($mesesLabels),
-        datasets: [{
-            label: 'Registros',
-            data: @json($mesesTotales),
-            backgroundColor: 'rgba(192,132,252,0.4)',
-            borderColor: '#c084fc',
-            borderWidth: 2,
-            borderRadius: 8,
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-            x: { ticks: { color: '#6b6b8a' }, grid: { color: '#1e1e2e' } },
-            y: { ticks: { color: '#6b6b8a' }, grid: { color: '#1e1e2e' }, beginAtZero: true }
+let chart;
+
+function crearGrafica() {
+    const styles = getComputedStyle(document.body);
+
+    return new Chart(document.getElementById('monthChart'), {
+        type: 'bar',
+        data: {
+            labels: @json($mesesLabels),
+            datasets: [{
+                label: 'Registros',
+                data: @json($mesesTotales),
+                backgroundColor: 'rgba(192,132,252,0.4)',
+                borderColor: '#c084fc',
+                borderWidth: 2,
+                borderRadius: 8,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    ticks: { color: styles.getPropertyValue('--muted') },
+                    grid: { color: styles.getPropertyValue('--border') }
+                },
+                y: {
+                    ticks: { color: styles.getPropertyValue('--muted') },
+                    grid: { color: styles.getPropertyValue('--border') },
+                    beginAtZero: true
+                }
+            }
         }
-    }
+    });
+}
+
+// crear gráfica al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    chart = crearGrafica();
 });
 </script>
+<button onclick="toggleTheme()" id="themeBtn" style="
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    width:48px; height:48px; border-radius:50%;
+    background:var(--surface); border:1px solid var(--border);
+    color:var(--text); font-size:1.3rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:999;">
+    🌙
+</button>
 </body>
 </html>

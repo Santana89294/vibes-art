@@ -5,7 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibes Art – Notificaciones</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <script>
+function toggleTheme() {
+    const btn = document.getElementById('themeBtn');
+
+    if (document.body.classList.contains('light')) {
+        document.body.classList.remove('light');
+        if (btn) btn.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.add('light');
+        if (btn) btn.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// aplicar tema al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('themeBtn');
+    const theme = localStorage.getItem('theme');
+
+    if (theme === 'light') {
+        document.body.classList.add('light');
+        if (btn) btn.textContent = '☀️';
+    } else {
+        document.body.classList.remove('light');
+        if (btn) btn.textContent = '🌙';
+    }
+});
+</script>
     <style>
+
         :root { --bg:#0a0a0f; --surface:#12121a; --border:#1e1e2e; --accent1:#c084fc; --accent2:#f472b6; --text:#e2e2f0; --muted:#6b6b8a; }
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
         body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem;}
@@ -60,6 +90,16 @@
         .btn-delete{padding:0.35rem 0.7rem;border-radius:8px;font-size:0.75rem;cursor:pointer;border:1px solid rgba(255,68,68,0.3);background:rgba(255,68,68,0.1);color:#FF4444;font-family:'DM Sans',sans-serif;}
         .empty-state{text-align:center;padding:2.5rem;color:var(--muted);font-size:0.9rem;}
         .counter{font-size:0.78rem;color:var(--muted);margin-bottom:1rem;}
+        body.light {
+    --bg: #f5f5f9;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --muted: #6b7280;
+
+    --accent1: #9333ea;
+    --accent2: #ec4899;
+}
     </style>
 </head>
 <body>
@@ -152,5 +192,14 @@
     </div>
 
 </div>
+<button onclick="toggleTheme()" id="themeBtn" style="
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    width:48px; height:48px; border-radius:50%;
+    background:var(--surface); border:1px solid var(--border);
+    color:var(--text); font-size:1.3rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:999;">
+    🌙
+</button>
 </body>
 </html>

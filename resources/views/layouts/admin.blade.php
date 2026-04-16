@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -392,37 +393,41 @@ body.light .sidebar-brand {
 
     @yield('content')
 </main>
-<button id="toggleTheme" class="btn btn-outline" style="position:fixed; top:20px; right:20px; z-index:999;">
-    ☀️ Modo claro
+<button onclick="toggleTheme()" id="themeBtn" style="
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    width:48px; height:48px; border-radius:50%;
+    background:var(--surface); border:1px solid var(--border);
+    color:var(--text); font-size:1.3rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:999;
+    transition: transform 0.2s;">
+    🌙
 </button>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+function toggleTheme() {
+    const btn = document.getElementById('themeBtn');
 
-    const btn = document.getElementById('toggleTheme');
-
-    function aplicarTema() {
-        const theme = localStorage.getItem('theme');
-
-        if (theme === 'light') {
-            document.body.classList.add('light');
-            btn.textContent = '🌙 Modo oscuro';
-        } else {
-            document.body.classList.remove('light');
-            btn.textContent = '☀️ Modo claro';
-        }
+    if (document.body.classList.contains('light')) {
+        document.body.classList.remove('light');
+        btn.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.body.classList.add('light');
+        btn.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
     }
+}
 
-    aplicarTema();
+// aplicar al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('themeBtn');
 
-    btn.addEventListener('click', () => {
-        if (document.body.classList.contains('light')) {
-            localStorage.setItem('theme', 'dark');
-        } else {
-            localStorage.setItem('theme', 'light');
-        }
-        aplicarTema();
-    });
-
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light');
+        btn.textContent = '☀️';
+    } else {
+        btn.textContent = '🌙';
+    }
 });
 </script>
 </body>
