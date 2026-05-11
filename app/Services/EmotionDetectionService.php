@@ -5,50 +5,74 @@ namespace App\Services;
 class EmotionDetectionService
 {
     protected array $keywords = [
-        'ira' => [
-             'critico', 'distante', 'frustrado', 'agresivo', 'loco',
-            'lleno de odio', 'amenazado', 'herido', 'sarcastico', 'esceptico',
-            'desconfiado', 'introvertido', 'irritado', 'enfurecido', 'hostil',
-            'provocador', 'rabioso', 'furioso', 'ultrajado',
-            'resentido', 'celoso', 'atacado', 'devastado', 'apenado',
+    'ira' => [
+        'critico', 'critica', 'distante', 'frustrado', 'frustrada',
+        'agresivo', 'agresiva', 'loco', 'loca',
+        'lleno de odio', 'llena de odio',
+        'amenazado', 'amenazada', 'herido', 'herida',
+        'sarcastico', 'sarcastica', 'esceptico', 'esceptica',
+        'desconfiado', 'desconfiada', 'introvertido', 'introvertida',
+        'irritado', 'irritada', 'enfurecido', 'enfurecida',
+        'hostil', 'provocador', 'provocadora', 'rabioso', 'rabiosa',
+        'furioso', 'furiosa', 'ultrajado', 'ultrajada',
+        'resentido', 'resentida', 'celoso', 'celosa',
+        'atacado', 'atacada', 'devastado', 'devastada',
+        'apenado', 'apenada', 'ira',
+    ],
 
-        ],
-        'miedo' => [
-           'humillado', 'rechazado', 'sumiso', 'inseguro',
-            'ansioso', 'asustado', 'ridiculizado', 'irrespetado',
-            'alienado', 'marginado', 'insignificante', 'inutil', 'inferior',
-            'insuficiente', 'preocupado', 'agobiado',
-            'espantado', 'aterrado',
-        ],
-        'asco' => [
-            'asco','disconforme', 'desepcionado', 'horrible', 'abstinencia',
-            'moralista', 'reacio', 'repugnante', 'revoltoso', 'odioso',
-            'aversion', 'vacilante',
-        ],
-        'tristeza' => [
-            'triste', 'culpable', 'abandonado', 'desesperado',
-            'deprimido', 'solo', 'aburrido', 'arrepentido',
-            'avergonzado', 'ignorado', 'victimizado', 'desvalido',
-            'vulnerable', 'melancolico', 'vacio', 'desamparado',
-            'aislado', 'apatico', 'indiferente',
-        ],
-        'felicidad' => [
-            'feliz', 'alegre', 'interesado', 'orgulloso',
-            'aceptado', 'poderoso', 'pacifico', 'intimo',
-            'optimista', 'liberado', 'euforico', 'entretenido',
-            'curioso', 'importante', 'seguro', 'respetado',
-            'satisfecho', 'valiente', 'provocativo', 'cariñoso', 'esperanzado',
-            'sensible', 'bromista', 'abierto', 'inspirado',
+    'miedo' => [
+        'humillado', 'humillada', 'rechazado', 'rechazada',
+        'sumiso', 'sumisa', 'inseguro', 'insegura',
+        'ansioso', 'ansiosa', 'asustado', 'asustada',
+        'ridiculizado', 'ridiculizada', 'irrespetado', 'irrespetada',
+        'alienado', 'alienada', 'marginado', 'marginada',
+        'insignificante', 'inutil', 'inferior', 'insuficiente',
+        'preocupado', 'preocupada', 'agobiado', 'agobiada',
+        'espantado', 'espantada', 'aterrado', 'aterrada', 'miedo',
+    ],
 
-        ],
-        'sorpresa' => [
-            'sorprendido', 'confundido', 'asombrado',
-            'entusiasmado', 'conmocionado', 'abatido',
-            'desilusionado', 'perplejo', 'estupefacto', 'impresionado',
-            'entusiasta', 'energico',
-        ],
-    ];
+    'asco' => [
+        'disconforme', 'decepcionado', 'decepcionada', 'horrible',
+        'abstinencia', 'moralista', 'reacio', 'reacia',
+        'repugnante', 'revoltoso', 'revoltosa', 'odioso', 'odiosa',
+        'aversion', 'vacilante', 'asco',
+    ],
 
+    'tristeza' => [
+        'triste', 'culpable', 'abandonado', 'abandonada',
+        'desesperado', 'desesperada', 'deprimido', 'deprimida',
+        'solo', 'sola', 'aburrido', 'aburrida',
+        'arrepentido', 'arrepentida', 'avergonzado', 'avergonzada',
+        'ignorado', 'ignorada', 'victimizado', 'victimizada',
+        'desvalido', 'desvalida', 'vulnerable', 'melancolico', 'melancolica',
+        'vacio', 'vacia', 'desamparado', 'desamparada',
+        'aislado', 'aislada', 'apatico', 'apatica',
+        'indiferente', 'despechado', 'despechada',
+    ],
+
+    'felicidad' => [
+        'feliz', 'alegre', 'interesado', 'interesada',
+        'orgulloso', 'orgullosa', 'aceptado', 'aceptada',
+        'poderoso', 'poderosa', 'pacifico', 'pacifica',
+        'intimo', 'intima', 'optimista', 'liberado', 'liberada',
+        'euforico', 'euforica', 'entretenido', 'entretenida',
+        'curioso', 'curiosa', 'importante', 'seguro', 'segura',
+        'respetado', 'respetada', 'satisfecho', 'satisfecha',
+        'valiente', 'provocativo', 'provocativa',
+        'cariñoso', 'cariñosa', 'esperanzado', 'esperanzada',
+        'sensible', 'bromista', 'abierto', 'abierta',
+        'inspirado', 'inspirada', 'felicidad',
+    ],
+
+    'sorpresa' => [
+        'sorprendido', 'sorprendida', 'confundido', 'confundida',
+        'asombrado', 'asombrada', 'entusiasmado', 'entusiasmada',
+        'conmocionado', 'conmocionada', 'abatido', 'abatida',
+        'desilusionado', 'desilusionada', 'perplejo', 'perpleja',
+        'estupefacto', 'estupefacta', 'impresionado', 'impresionada',
+        'entusiasta', 'energico', 'energica', 'sorpresa',
+    ],
+];
     public function detect(string $text): array
     {
         $scores    = [];
