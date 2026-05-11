@@ -126,6 +126,31 @@
     </div>
 
     <div class="card">
+        @if(session('crisis'))
+<div style="
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.4);
+    border-radius: 16px; padding: 1.5rem;
+    margin-bottom: 1.5rem; text-align: center;">
+    <div style="font-size: 2rem; margin-bottom: 0.8rem;">💙</div>
+    <div style="font-size: 1.1rem; font-weight: 600; color: #f87171; margin-bottom: 0.8rem;">
+        Estamos aquí para ti
+    </div>
+    <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem;">
+        Notamos que estás pasando por un momento muy difícil.
+        Por el momento Vibes Art no está preparada para acompañarte en esta situación,
+        pero tu bienestar es lo más importante.
+    </p>
+    <p style="color: var(--text); font-size: 0.88rem; line-height: 1.6;">
+        Por favor comunícate con alguien de confianza o llama a una línea de ayuda en crisis.
+        No estás solo/a. 💙
+    </p>
+    <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(248,113,113,0.08); border-radius: 10px;">
+        <div style="font-size: 0.82rem; color: var(--muted);">Línea de crisis Colombia</div>
+        <div style="font-size: 1.1rem; font-weight: 600; color: #f87171;">📞 106</div>
+    </div>
+</div>
+@endif
         <div class="date-badge">{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM') }}</div>
 
         <h1 class="card-title">¿Cómo te sientes hoy? ✍️</h1>

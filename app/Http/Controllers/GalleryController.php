@@ -24,8 +24,8 @@ class GalleryController extends Controller
     // ─── HU011: Galería organizada por días ───────────────────────────
     public function index(Request $request)
     {
-        $mes  = $request->get('mes', now()->month);
-        $anio = $request->get('anio', now()->year);
+       $mes  = (int) $request->get('mes', now()->month);
+       $anio = (int) $request->get('anio', now()->year);
 
         $emociones = Emotion::where('user_id', Auth::id())
             ->whereMonth('fecha_emo', $mes)

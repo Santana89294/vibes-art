@@ -19,13 +19,13 @@ function toggleTheme() {
         btn.textContent = '☀️';
         localStorage.setItem('theme', 'light');
     }
-    // 🔥 ESTO VA FUERA del if/else (MUY IMPORTANTE)
+
+    // 🔥 ACTUALIZA LA GRÁFICA
     if (typeof chart !== 'undefined') {
         chart.destroy();
         chart = crearGrafica();
     }
 }
-
 // aplicar tema al cargar
 document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('themeBtn');

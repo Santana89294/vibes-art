@@ -148,4 +148,33 @@ class EmotionDetectionService
             'neutral'    => '😐',
         ][$emotion] ?? '😐';
     }
+    protected array $crisisKeywords = [
+    'suicidarme', 'suicidio', 'suicidar', 'matarme', 'matar',
+    'no quiero vivir', 'quiero morir', 'mejor muerto', 'mejor muerta',
+    'quitarme la vida', 'acabar con mi vida', 'hacerme daño',
+    'cortarme', 'lastimarme', 'no vale la pena vivir',
+    'desaparecer para siempre', 'no quiero seguir',
+];
+
+public function isCrisis(string $text): bool
+{
+    $lowerText = strtolower($text);
+    $lowerText = str_replace(
+        ['á','é','í','ó','ú','ü','ñ'],
+        ['a','e','i','o','u','u','n'],
+        $lowerText
+    );
+
+    foreach ($this->crisisKeywords as $word) {
+        $wordNorm = str_replace(
+            ['á','é','í','ó','ú','ü','ñ'],
+            ['a','e','i','o','u','u','n'],
+            strtolower($word)
+        );
+        if (str_contains($lowerText, $wordNorm)) {
+            return true;
+        }
+    }
+    return false;
+}
 }

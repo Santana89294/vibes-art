@@ -38,6 +38,10 @@ class EmotionController extends Controller
             'texto_emo.min'      => 'Escribe al menos 10 caracteres.',
             'texto_emo.max'      => 'Máximo 1000 caracteres.',
         ]);
+        // Detección de crisis
+if ($this->detector->isCrisis($request->texto_emo)) {
+    return redirect()->back()->with('crisis', true);
+}
 
         $result = $this->detector->detect($request->texto_emo);
 
