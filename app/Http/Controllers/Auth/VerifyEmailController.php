@@ -44,6 +44,8 @@ class VerifyEmailController extends Controller
             'role'           => 'usuario',
             'registro_user'  => 'activo',
             'email_verified' => true,
+            'terms_accepted_at' => $pending['terms_accepted_at'],
+            'terms_version'     => $pending['terms_version'],
         ]);
 
         // Limpiar caché y sesión

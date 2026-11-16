@@ -86,7 +86,17 @@
             autocomplete="new-password"
         >
     </div>
-
+<div class="checkbox-group" style="align-items:flex-start;">
+    <input type="checkbox" id="terminos" name="terminos" value="1" required style="margin-top:3px;">
+    <label for="terminos" style="line-height:1.4;">
+        He leído y acepto los
+        <a href="{{ route('terms') }}" target="_blank" class="link">Términos y Condiciones</a>
+        y entiendo que Vibes Art no es un servicio médico ni psicológico.
+    </label>
+</div>
+@error('terminos')
+    <span class="error-msg" style="margin-bottom:1rem;display:block;">{{ $message }}</span>
+@enderror
     <button type="submit" class="btn-primary">
         Crear mi cuenta 🎨
     </button>

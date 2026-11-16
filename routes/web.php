@@ -13,6 +13,9 @@ use App\Http\Controllers\Admin\AdminController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+// terminos
+Route::view('/terminos', 'legal.terms')->name('terms');
+
 
 // Registro (HU001)
 Route::get('/registro',  [RegisterController::class, 'showForm'])->name('register');

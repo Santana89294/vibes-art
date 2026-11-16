@@ -24,6 +24,7 @@ class RegisterController extends Controller
             'edad_user'   => 'required|integer|min:10|max:100',
             'email_user'  => 'required|email|unique:users,email_user',
             'contra_user' => 'required|string|min:6|confirmed',
+            'terminos' => 'accepted',
         ], [
             'nom_user.required'     => 'El nombre es obligatorio.',
             'nom_user.min'          => 'El nombre debe tener al menos 2 caracteres.',
@@ -34,6 +35,7 @@ class RegisterController extends Controller
             'contra_user.required'  => 'La contraseña es obligatoria.',
             'contra_user.min'       => 'La contraseña debe tener al menos 6 caracteres.',
             'contra_user.confirmed' => 'Las contraseñas no coinciden.',
+            'terminos.accepted' => 'Debes aceptar los Términos y Condiciones para continuar.',
         ]);
 
         // Código de verificación
@@ -46,6 +48,8 @@ class RegisterController extends Controller
             'email_user'  => $request->email_user,
             'contra_user' => Hash::make($request->contra_user),
             'code'        => $code,
+            'terms_accepted_at' => now()->toDateTimeString(),
+            'terms_version'     => '1.0',
         ], now()->addMinutes(15));
 
         // 🔥 IMPORTANTE: intentar enviar correo SIN romper app
